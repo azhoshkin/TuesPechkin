@@ -29,6 +29,11 @@ namespace TuesPechkin
                         {
                             WriteStreamToFile(filename, nameAndContents.Value);
                         }
+                        var imgFileName = System.IO.Path.Combine(path, GetImgDllFileName(nameAndContents.Key));
+                        if (!File.Exists(imgFileName))
+                        {
+                            File.Copy(filename, imgFileName, true);
+                        }
                     }
 
                     deployed = true;
@@ -46,6 +51,13 @@ namespace TuesPechkin
             {
                 return this.GetType().Assembly.GetName().Version.ToString();
             }
+        }
+
+        public static string GetImgDllFileName(string fileName)
+        {
+            var fileWoExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            var fileExt = System.IO.Path.GetExtension(fileName);
+            return fileWoExt + "_img" + fileExt;
         }
 
         public EmbeddedDeployment(IDeployment physical)
